@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body, #root { height: 100%; }
+body { @apply bg-mist text-ink font-display; }
+:focus-visible { outline: 3px solid #F2A900; outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+.btn { @apply inline-flex items-center justify-center gap-1 rounded-md px-4 py-2 text-sm font-semibold bg-water text-white hover:bg-ink disabled:opacity-50; }
+.btn-alt { @apply inline-flex items-center justify-center gap-1 rounded-md px-4 py-2 text-sm font-semibold bg-marigold text-ink hover:brightness-95 disabled:opacity-50; }
+.btn-ghost { @apply inline-flex items-center justify-center gap-1 rounded-md px-3 py-1.5 text-sm font-semibold border border-water text-water hover:bg-water hover:text-white; }
+.input { @apply w-full rounded-md border border-slate2/40 bg-white px-3 py-2 text-sm; }
+.label { @apply block text-sm font-semibold mb-1; }
+.panel { @apply rounded-lg bg-white border border-slate2/20 p-4; }
+.chip { @apply rounded-full border border-slate2/40 bg-white px-3 py-1 text-xs font-semibold cursor-pointer; }
+.chip-on { @apply bg-water text-white border-water; }
+.story { font-family: 'Source Serif 4', Georgia, serif; line-height: 1.7; max-width: 68ch; }
+
+.hh-pin { width: 30px; height: 30px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); display:flex; align-items:center; justify-content:center; border:2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.4); }
+.hh-pin span { transform: rotate(45deg); font-size: 14px; }
+.hh-event { width: 30px; height: 30px; transform: rotate(45deg); background:#F2A900; border:2px solid #12202B; display:flex; align-items:center; justify-content:center; }
+.hh-event span { transform: rotate(-45deg); font-size: 14px; }
+.leaflet-container { font-family: inherit; }

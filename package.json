@@ -1,0 +1,13 @@
+{
+  "name": "hidden-heritage-map",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Hidden Heritage Map - Explore. Participate. Preserve.",
+  "scripts": {
+    "setup": "npm install && npm install --prefix server && npm install --prefix client",
+    "dev": "concurrently -n api,web -c yellow,cyan \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
+    "build": "npm run build --prefix client",
+    "start": "npm start --prefix server"
+  },
+  "devDependencies": { "concurrently": "^8.2.2" }
+}

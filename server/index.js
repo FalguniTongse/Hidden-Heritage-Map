@@ -13,6 +13,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DB_FILE = path.join(__dirname, 'data', 'db.json');
 const UPLOADS = path.join(__dirname, 'uploads');
 fs.mkdirSync(UPLOADS, { recursive: true });
+fs.mkdirSync(path.dirname(DB_FILE), { recursive: true });
 
 // ---------- tiny JSON "database" (swap for PostgreSQL/PostGIS: see /database/schema.sql) ----------
 let db = fs.existsSync(DB_FILE) ? JSON.parse(fs.readFileSync(DB_FILE, 'utf8')) : structuredClone(seed);

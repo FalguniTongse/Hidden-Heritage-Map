@@ -36,13 +36,14 @@ export default function Home() {
             animation: 'kenburns 18s ease-in-out infinite alternate',
           }}
         />
+        <div className="mandala-corner" aria-hidden="true" />
         <div className="relative mx-auto max-w-5xl px-4 py-20 md:py-28">
           <p className="fade-up mb-3 text-sm font-semibold uppercase tracking-widest text-marigold">Explore. Participate. Preserve.</p>
           <h1 className="fade-up delay-1 max-w-3xl text-4xl font-extrabold leading-tight md:text-6xl">Discover the heritage hiding in your city</h1>
           <p className="fade-up delay-2 mt-4 max-w-2xl text-lg opacity-90">Old stepwells, forgotten markets, folk traditions and family stories. Explore them, add what you know, and help keep them alive.</p>
           <div className="fade-up delay-3 mt-8 flex flex-wrap gap-3">
             <Link to="/map" onClick={(e) => { if (go('/map')) e.preventDefault(); }} className="btn-alt !px-6 !py-3 !text-base">Explore the map</Link>
-            <Link to="/add" onClick={(e) => { if (go('/add')) e.preventDefault(); }} className="btn-ghost !border-white !px-6 !py-3 !text-base !text-white hover:!bg-white hover:!text-ink">Add a hidden site</Link>
+            <Link to="/add" onClick={(e) => { if (go('/add')) e.preventDefault(); }} className="btn-light !px-6 !py-3 !text-base">Add a hidden site</Link>
           </div>
           <div className="mt-10 flex flex-wrap gap-8">
             {stats.map(([n, label]) => (

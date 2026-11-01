@@ -53,7 +53,7 @@ export default function App() {
   return (
     <div className="flex h-full flex-col">
       {splash && <Splash onDone={closeSplash} />}
-      <header className="bg-water">
+      <header className="bg-gradient-to-r from-water via-[#0E6F7F] to-ink shadow-md">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-2 px-4 py-2">
           <NavLink to="/" className="text-lg font-extrabold text-white">Hidden Heritage Map <span className="ml-2 hidden text-xs font-normal opacity-80 md:inline">Explore. Participate. Preserve.</span></NavLink>
           <nav className="flex flex-wrap gap-1" aria-label="Main">

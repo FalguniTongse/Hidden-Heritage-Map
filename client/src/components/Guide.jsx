@@ -198,7 +198,7 @@ export function Splash({ onDone }) {
         <p className="fade-up delay-2 mt-2 max-w-md text-sm opacity-90">I’m your guide. Let me show you the stories hiding in plain sight.</p>
         <div className="fade-up delay-3 mt-4 flex flex-wrap justify-center gap-2">
           {voiceOn && <button className="btn-alt !px-5 !py-2.5" onClick={hear}>🔊 Hear my greeting</button>}
-          <button className="btn-ghost !border-white !px-5 !py-2.5 !text-white hover:!bg-white hover:!text-ink" onClick={finish}>Enter</button>
+          <button className="btn-light !px-5 !py-2.5" onClick={finish}>Enter</button>
         </div>
         <div className="mt-4 h-1 w-48 overflow-hidden rounded bg-white/25"><div className="h-full bg-marigold" style={{ animation: 'fillBar 6s linear forwards' }} /></div>
       </div>

@@ -11,6 +11,7 @@ import Passport from './pages/Passport.jsx';
 import Leaderboard from './pages/Leaderboard.jsx';
 import Admin from './pages/Admin.jsx';
 import Assistant from './pages/Assistant.jsx';
+import Home from './pages/Home.jsx';
 
 const link = ({ isActive }) => `px-3 py-1.5 rounded-md text-sm font-semibold ${isActive ? 'bg-marigold text-ink' : 'text-white hover:bg-white/15'}`;
 
@@ -43,7 +44,8 @@ export default function App() {
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-2 px-4 py-2">
           <NavLink to="/" className="text-lg font-extrabold text-white">Hidden Heritage Map <span className="ml-2 hidden text-xs font-normal opacity-80 md:inline">Explore. Participate. Preserve.</span></NavLink>
           <nav className="flex flex-wrap gap-1" aria-label="Main">
-            <NavLink to="/" end className={link}>Map</NavLink>
+            <NavLink to="/" end className={link}>Home</NavLink>
+            <NavLink to="/map" className={link}>Map</NavLink>
             <NavLink to="/events" className={link}>Events</NavLink>
             <NavLink to="/hunt" className={link}>Heritage Hunt</NavLink>
             <NavLink to="/add" className={link}>Add Heritage</NavLink>
@@ -57,7 +59,8 @@ export default function App() {
       </header>
       <main className="min-h-0 flex-1 overflow-auto">
         <Routes>
-          <Route path="/" element={<MapPage />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/map" element={<MapPage />} />
           <Route path="/heritage/:id" element={<HeritagePage />} />
           <Route path="/add" element={<AddHeritage />} />
           <Route path="/events" element={<Events />} />

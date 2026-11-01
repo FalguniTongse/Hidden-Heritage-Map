@@ -16,3 +16,5 @@ export const api = {
 export const CATEGORIES = ['Architecture', 'Monument', 'Religious', 'Craft', 'Folk Art', 'Music', 'Dance', 'Food', 'Festival', 'Local Story'];
 export const CAT_ICON = { Architecture: '🏛️', Monument: '🗿', Religious: '🛕', Craft: '🧵', 'Folk Art': '🎨', Music: '🎵', Dance: '💃', Food: '🍲', Festival: '🎪', 'Local Story': '📜' };
 export const CONDITIONS = ['Good', 'Needs Attention', 'Deteriorating', 'At Risk'];
+export const photoOf = (h) =>
+  h.media?.find((m) => (m.type || '').toLowerCase() === 'image' || /\.(jpe?g|png|webp|gif)$/i.test(m.url || ''))?.url;

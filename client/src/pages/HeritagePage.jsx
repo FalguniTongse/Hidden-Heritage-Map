@@ -7,6 +7,40 @@ import Quiz from '../components/Quiz.jsx';
 
 const Row = ({ k, v }) => v ? <div className="grid grid-cols-[9rem_1fr] gap-2 border-b border-slate2/15 py-2 text-sm"><dt className="font-semibold">{k}</dt><dd>{v}</dd></div> : null;
 
+const VOICE_LANG = { English: 'en-IN', Hindi: 'hi-IN', Marathi: 'mr-IN' };
+
+function ReadAloud({ text, lang }) {
+  const [state, setState] = useState('idle');
+  const synth = typeof window !== 'undefined' ? window.speechSynthesis : null;
+  useEffect(() => () => synth?.cancel(), [text]);
+  if (!synth) return <p className="text-sm text-slate2">Reading aloud is not supported in this browser.</p>;
+
+  const play = () => {
+    synth.cancel();
+    const parts = text.match(/[^.!?।]+[.!?।]*/g) || [text];
+    parts.forEach((p, i) => {
+      const u = new SpeechSynthesisUtterance(p.trim());
+      u.lang = lang; u.rate = 0.95;
+      if (i === parts.length - 1) u.onend = () => setState('idle');
+      synth.speak(u);
+    });
+    setState('playing');
+  };
+  const pause = () => { synth.pause(); setState('paused'); };
+  const resume = () => { synth.resume(); setState('playing'); };
+  const stop = () => { synth.cancel(); setState('idle'); };
+
+  return (
+    <section className="panel flex flex-wrap items-center gap-2">
+      <h2 className="mr-2 font-bold">🔊 Listen to this story</h2>
+      {state === 'idle' && <button className="btn" onClick={play}>▶ Read aloud</button>}
+      {state === 'playing' && <button className="btn-alt" onClick={pause}>⏸ Pause</button>}
+      {state === 'paused' && <button className="btn" onClick={resume}>▶ Resume</button>}
+      {state !== 'idle' && <button className="btn-ghost" onClick={stop}>⏹ Stop</button>}
+    </section>
+  );
+}
+
 export default function HeritagePage() {
   const { id } = useParams(); const { user } = useAuth();
   const [h, setH] = useState(null); const [msg, setMsg] = useState(''); const [tr, setTr] = useState(null);
@@ -17,15 +51,21 @@ export default function HeritagePage() {
   if (!h) return <p className="p-6">{msg || 'Loading…'}</p>;
   const sources = h.sources || [];
 
+  const readText = tr
+  ? tr.translated
+  : [h.name, h.description, h.significance && 'Why it matters. ' + h.significance, h.localStory && 'Local story. ' + h.localStory].filter(Boolean).join('. ');
+ const readLang = tr ? 'hi-IN' : VOICE_LANG[h.language] || 'en-IN';
+
   return (
     <article className="mx-auto max-w-4xl space-y-5 p-4">
-      <Link to="/" className="text-sm underline">← Back to map</Link>
+      <Link to="/map" className="text-sm underline">← Back to map</Link>
       <header>
         <h1 className="text-3xl font-extrabold">{h.name}{h.localName && <span className="ml-2 text-lg font-normal text-slate2">({h.localName})</span>}</h1>
         <div className="mt-2 flex flex-wrap items-center gap-2"><VerifyBadge status={h.verification.status} /><ConditionBadge condition={h.condition} /><span className="text-sm">{h.category}{h.tags?.length ? ' · ' + h.tags.join(', ') : ''}</span></div>
         {!h.published && <p className="mt-2 rounded bg-marigold/30 p-2 text-sm">This entry is awaiting admin review and is not public yet.</p>}
       </header>
       <Media items={h.media} />
+      <ReadAloud text={readText} lang={readLang} />
       <dl className="panel">
         <Row k="Location" v={`${h.locality}, ${h.district}, ${h.state} (${h.lat.toFixed(4)}, ${h.lng.toFixed(4)})`} />
         <Row k="Period" v={h.period} /><Row k="Description" v={h.description} /><Row k="Significance" v={h.significance} />
@@ -74,6 +114,15 @@ export default function HeritagePage() {
         <textarea className="input" placeholder="What is wrong, and what is your source?" value={corr} onChange={(e) => setCorr(e.target.value)} />
         <button className="btn-ghost" disabled={!user || !corr} onClick={() => act(async () => { const r = await api.post(`/heritage/${id}/correction`, { text: corr }); setCorr(''); return r; })}>Send report</button>
       </section>
+      {h.youtube && (
+      <section className="panel flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 className="font-bold">🎬 Watch the storytelling</h2>
+          <p className="text-sm text-slate2">Opens on YouTube in a new tab.</p>
+        </div>
+        <a href={h.youtube} target="_blank" rel="noopener noreferrer" className="btn-alt">▶ Watch on YouTube</a>
+      </section>
+    )}
     </article>
   );
 }

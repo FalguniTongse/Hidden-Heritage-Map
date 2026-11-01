@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import { Link } from 'react-router-dom';
-import { api, CATEGORIES, CAT_ICON } from '../api.js';
+import { api, CATEGORIES, CAT_ICON,photoOf } from '../api.js';
 import { VerifyBadge, ConditionBadge } from '../components/Badges.jsx';
 
 const pin = (cat, risk) => L.divIcon({ className: '', iconSize: [30, 30], iconAnchor: [15, 30],
@@ -64,10 +64,13 @@ export default function MapPage() {
         <p className="text-xs text-slate2">★ marks active cultural events. Red pins need attention. {items.length} sites shown.</p>
         <ul className="space-y-2">
           {items.map((h) => (
-            <li key={h.id}><button className="panel w-full text-left hover:border-water" onClick={() => { setSel(h); map.current.setView([h.lat, h.lng], 15); }}>
-              <div className="font-bold">{CAT_ICON[h.category]} {h.name}</div>
-              <div className="mt-1 flex flex-wrap gap-1"><VerifyBadge status={h.verification.status} /><ConditionBadge condition={h.condition} />{h.distanceKm != null && <span className="text-xs">{h.distanceKm} km</span>}</div>
-            </button></li>
+            <li key={h.id}>
+              <button className="panel w-full overflow-hidden text-left hover:border-water" onClick={() => { setSel(h); map.current.setView([h.lat, h.lng], 15); }}>
+                {photoOf(h) && <img src={photoOf(h)} alt={h.name} className="mb-2 h-28 w-full rounded object-cover" />}
+                <div className="font-bold">{CAT_ICON[h.category]} {h.name}</div>
+                <div className="mt-1 flex flex-wrap gap-1"><VerifyBadge status={h.verification.status} /><ConditionBadge condition={h.condition} />{h.distanceKm != null && <span className="text-xs">{h.distanceKm} km</span>}</div>
+              </button>
+            </li>
           ))}
           {!items.length && <li className="text-sm text-slate2">Nothing matches yet. Try fewer filters, or add a hidden site yourself.</li>}
         </ul>
@@ -77,6 +80,7 @@ export default function MapPage() {
         {sel && (
           <div className="absolute bottom-4 left-4 right-4 z-[1000] max-w-md rounded-lg bg-white p-4 shadow-xl md:left-auto">
             <button className="float-right text-xl leading-none" aria-label="Close preview" onClick={() => setSel(null)}>×</button>
+            {photoOf(sel) && <img src={photoOf(sel)} alt={sel.name} className="mb-2 h-36 w-full rounded object-cover" />}
             <h2 className="text-lg font-extrabold">{sel.name}</h2>
             <p className="text-sm text-slate2">{sel.category} · {sel.locality}, {sel.district}</p>
             <div className="my-2 flex flex-wrap gap-1"><VerifyBadge status={sel.verification.status} /><ConditionBadge condition={sel.condition} /></div>

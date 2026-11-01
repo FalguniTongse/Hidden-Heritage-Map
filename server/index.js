@@ -18,6 +18,20 @@ fs.mkdirSync(path.dirname(DB_FILE), { recursive: true });
 // ---------- tiny JSON "database" (swap for PostgreSQL/PostGIS: see /database/schema.sql) ----------
 let db = fs.existsSync(DB_FILE) ? JSON.parse(fs.readFileSync(DB_FILE, 'utf8')) : structuredClone(seed);
 const save = () => fs.writeFileSync(DB_FILE, JSON.stringify(db, null, 2));
+// keep sample photos in sync with seed.js
+for (const s of seed.heritage) {
+  const h = db.heritage.find((x) => x.id === s.id);
+  if (!h) continue;
+
+  if (s.media?.length && !h.media?.length) {
+    h.media = s.media;
+  }
+
+  if (s.youtube) {
+    h.youtube = s.youtube;
+  }
+}
+
 save();
 
 const app = express();

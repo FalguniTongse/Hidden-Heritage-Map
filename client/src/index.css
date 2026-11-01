@@ -22,3 +22,32 @@ body { @apply bg-mist text-ink font-display; }
 .hh-event { width: 30px; height: 30px; transform: rotate(45deg); background:#F2A900; border:2px solid #12202B; display:flex; align-items:center; justify-content:center; }
 .hh-event span { transform: rotate(-45deg); font-size: 14px; }
 .leaflet-container { font-family: inherit; }
+
+/* ---------- Home page animations ---------- */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+@keyframes kenburns { from { transform: scale(1); } to { transform: scale(1.1); } }
+.fade-up { animation: fadeUp .8s ease both; }
+.delay-1 { animation-delay: .15s; }
+.delay-2 { animation-delay: .3s; }
+.delay-3 { animation-delay: .45s; }
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
+.reveal.show { opacity: 1; transform: none; }
+.lift { transition: transform .25s ease, box-shadow .25s ease; }
+.lift:hover { transform: translateY(-6px); box-shadow: 0 12px 28px rgba(18, 32, 43, .18); }
+
+/* ---------- Guide character animations ---------- */
+@keyframes floaty { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+@keyframes blink { 0%, 92%, 100% { transform: scaleY(1); } 96% { transform: scaleY(.1); } }
+@keyframes wave { 0%, 100% { transform: rotate(-8deg); } 50% { transform: rotate(14deg); } }
+@keyframes spinSlow { to { transform: rotate(360deg); } }
+@keyframes popIn { from { opacity: 0; transform: translateY(40px) scale(.85); } to { opacity: 1; transform: none; } }
+@keyframes fillBar { from { width: 0; } to { width: 100%; } }
+.g-float { animation: floaty 3.2s ease-in-out infinite; }
+.g-blink { transform-box: fill-box; transform-origin: center; animation: blink 4s infinite; }
+.g-wave { transform-origin: 128px 116px; animation: wave 1.1s ease-in-out infinite; }
+.spin-slow { animation: spinSlow 70s linear infinite; }
+.pop-in { animation: popIn .5s cubic-bezier(.2, .8, .2, 1) both; }
+
+/* ---------- Guide talking animation (while she speaks) ---------- */
+@keyframes talk { 0%, 100% { transform: scale(1) translateY(0); } 50% { transform: scale(1.03) translateY(-3px); } }
+.g-talk { animation: talk .55s ease-in-out infinite; transform-origin: bottom center; }

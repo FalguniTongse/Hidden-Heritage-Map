@@ -1,6 +1,7 @@
-import { NavLink, Route, Routes } from 'react-router-dom';
+import { NavLink, Route, Routes, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuth } from './auth.jsx';
+import Home from './pages/Home.jsx';
 import MapPage from './pages/MapPage.jsx';
 import HeritagePage from './pages/HeritagePage.jsx';
 import AddHeritage from './pages/AddHeritage.jsx';
@@ -11,9 +12,15 @@ import Passport from './pages/Passport.jsx';
 import Leaderboard from './pages/Leaderboard.jsx';
 import Admin from './pages/Admin.jsx';
 import Assistant from './pages/Assistant.jsx';
-import Home from './pages/Home.jsx';
+import { Splash, useGuide } from './components/Guide.jsx';
 
 const link = ({ isActive }) => `px-3 py-1.5 rounded-md text-sm font-semibold ${isActive ? 'bg-marigold text-ink' : 'text-white hover:bg-white/15'}`;
+
+// A menu link that lets the guide speak first, then opens the page after "Glad!".
+function GuideLink({ to, end, children }) {
+  const { go } = useGuide();
+  return <NavLink to={to} end={end} className={link} onClick={(e) => { if (go(to)) e.preventDefault(); }}>{children}</NavLink>;
+}
 
 function LoginBox() {
   const { user, users, login, register, logout } = useAuth();
@@ -38,21 +45,29 @@ function LoginBox() {
 
 export default function App() {
   const { user } = useAuth();
+  const { enabled, setEnabled, voiceOn, setVoiceOn } = useGuide();
+  const navigate = useNavigate();
+  const [splash, setSplash] = useState(() => !sessionStorage.getItem('hhm_splash'));
+  const closeSplash = () => { sessionStorage.setItem('hhm_splash', '1'); setSplash(false); navigate('/'); };
+
   return (
     <div className="flex h-full flex-col">
+      {splash && <Splash onDone={closeSplash} />}
       <header className="bg-water">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-2 px-4 py-2">
           <NavLink to="/" className="text-lg font-extrabold text-white">Hidden Heritage Map <span className="ml-2 hidden text-xs font-normal opacity-80 md:inline">Explore. Participate. Preserve.</span></NavLink>
           <nav className="flex flex-wrap gap-1" aria-label="Main">
-            <NavLink to="/" end className={link}>Home</NavLink>
-            <NavLink to="/map" className={link}>Map</NavLink>
-            <NavLink to="/events" className={link}>Events</NavLink>
-            <NavLink to="/hunt" className={link}>Heritage Hunt</NavLink>
-            <NavLink to="/add" className={link}>Add Heritage</NavLink>
-            <NavLink to="/assistant" className={link}>Ask AI</NavLink>
-            <NavLink to="/leaderboard" className={link}>Leaderboard</NavLink>
-            {user && <NavLink to="/passport" className={link}>My Passport</NavLink>}
-            {['admin', 'expert'].includes(user?.role) && <NavLink to="/admin" className={link}>Admin</NavLink>}
+            <GuideLink to="/" end>Home</GuideLink>
+            <GuideLink to="/map">Map</GuideLink>
+            <GuideLink to="/events">Events</GuideLink>
+            <GuideLink to="/hunt">Heritage Hunt</GuideLink>
+            <GuideLink to="/add">Add Heritage</GuideLink>
+            <GuideLink to="/assistant">Ask AI</GuideLink>
+            <GuideLink to="/leaderboard">Leaderboard</GuideLink>
+            {user && <GuideLink to="/passport">My Passport</GuideLink>}
+            {['admin', 'expert'].includes(user?.role) && <GuideLink to="/admin">Admin</GuideLink>}
+            <button className="rounded-md px-3 py-1.5 text-sm font-semibold text-white hover:bg-white/15" onClick={() => setEnabled(!enabled)} aria-pressed={enabled} title="Turn the guide on or off">🧕 Guide: {enabled ? 'On' : 'Off'}</button>
+            <button className="rounded-md px-3 py-1.5 text-sm font-semibold text-white hover:bg-white/15" onClick={() => setVoiceOn(!voiceOn)} aria-pressed={voiceOn} title="Turn the guide's voice on or off">🔊 Voice: {voiceOn ? 'On' : 'Off'}</button>
           </nav>
           <LoginBox />
         </div>
